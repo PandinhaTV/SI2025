@@ -30,11 +30,19 @@ public class DrawManager : MonoBehaviour
         controls.Disable();
     }
 
+    private void FixedUpdate()
+    {
+        bool menu = controls.Drawing.PickColor.ReadValue<float>() > 0f;
+        if (menu)
+        {
+            pickColorMenu.SetActive(!pickColorMenu.activeSelf);
+        }
+    }
     private void Update()
     {
         // Check if the button is currently pressed
         bool pressed = controls.Drawing.StartDraw.ReadValue<float>() > 0f;
-        bool menu = controls.Drawing.PickColor.ReadValue<float>() > 0f;
+        
         if (pressed && !isDrawing)
         {
             StartDrawing();
@@ -44,10 +52,7 @@ public class DrawManager : MonoBehaviour
             EndDrawing();
         }
 
-        if (menu)
-        {
-            pickColorMenu.SetActive(!pickColorMenu.activeSelf);
-        }
+       
         
         if (isDrawing)
             Draw();
