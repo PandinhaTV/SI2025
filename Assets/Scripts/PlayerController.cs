@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    public Animator animator;
     private Rigidbody2D rb;
     private PlayerControls controls;
     private Vector2 moveInput;
@@ -20,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool facingRight = true;
     private bool canJump = true;
-
+    private GameObject kid;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -46,13 +47,35 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Move the player horizontally
+        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         // Check if grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         // Reset jump availability when grounded
         if (isGrounded)
+        {
             canJump = true;
-
+            animator.SetBool("isGrounded", true);
+        }
+        else
+        {
+            animator.SetBool("isGrounded", false);
+        }
+            
+           
+            
+            
+        
+        
+        if (moveInput.x != 0 && isGrounded)
+        {
+            animator.SetBool("isRunning",true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
         // Flip sprite when changing direction
         if (moveInput.x > 0 && !facingRight)
             Flip();
@@ -62,14 +85,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Move the player horizontally
-        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        
 
         // Handle jump
         if (jumpPressed && canJump && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             canJump = false;
+            animator.SetBool("isGrounded", false);
         }
 
         jumpPressed = false; // reset jump flag

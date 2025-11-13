@@ -12,8 +12,13 @@ public class DrawManager : MonoBehaviour
     private List<Vector2> points = new List<Vector2>();
     private bool isDrawing;
     private bool isPicking;
+    
+    
+    
     [SerializeField]
     private GameObject pickColorMenu;
+
+    public int ColorPicked = 0;
 
     private void Awake()
     {
@@ -32,18 +37,18 @@ public class DrawManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        bool menu = controls.Drawing.PickColor.ReadValue<float>() > 0f;
-        if (menu)
-        {
-            pickColorMenu.SetActive(!pickColorMenu.activeSelf);
-        }
+        
+        
     }
     private void Update()
     {
+        bool isHeld = controls.Drawing.PickColor.ReadValue<float>() > 0f;
+            pickColorMenu.SetActive(isHeld);
+        
         // Check if the button is currently pressed
         bool pressed = controls.Drawing.StartDraw.ReadValue<float>() > 0f;
         
-        if (pressed && !isDrawing)
+        if (pressed && !isDrawing && !isHeld)
         {
             StartDrawing();
         }
@@ -64,10 +69,51 @@ public class DrawManager : MonoBehaviour
         GameObject newLine = Instantiate(linePrefab);
         currentLine = newLine.GetComponent<LineRenderer>();
         currentCollider = newLine.GetComponent<EdgeCollider2D>();
+        currentLine.useWorldSpace = false;
         points.Clear();
+        
+        // if X == 1, make it move left
+        ColorScript mover = newLine.GetComponent<ColorScript>();
+        if (mover != null)
+        {
+            // Wait 1 second before starting
+            mover.startDelay = 1f;
 
+            // Destroy after 6 seconds (you can tweak this)
+            mover.lifetime = 6f;
+
+            // Decide direction based on X
+            // X = 1 → Left, X = 2 → Right, X = 3 → Up, X = 4 → Down
+            switch (ColorPicked)
+            {
+                case 1:
+                    currentLine.startColor = Color.blue;
+                    currentLine.endColor = Color.blue;
+                    mover.direction = Vector2.left;
+                    break;
+                case 2:
+                    currentLine.startColor = Color.green;
+                    currentLine.endColor = Color.green;
+                    mover.direction = Vector2.right;
+                    break;
+                case 3:
+                    currentLine.startColor = Color.yellow;
+                    currentLine.endColor = Color.yellow;
+                    mover.direction = Vector2.up;
+                    break;
+                case 4:
+                    currentLine.startColor = Color.red;
+                    currentLine.endColor = Color.red;
+                    mover.direction = Vector2.down;
+                    break;
+                default:
+                    mover.direction = Vector2.zero;
+                    break;
+            }
+        }
+        
         Vector2 startPos = ScreenToWorldPos(controls.Drawing.Position.ReadValue<Vector2>());
-        AddPoint(startPos);
+        AddPoint(newLine.transform.InverseTransformPoint(startPos));
     }
 
     private void Draw()
@@ -104,5 +150,10 @@ public class DrawManager : MonoBehaviour
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
         return new Vector2(worldPos.x, worldPos.y);
+    }
+
+    public void SetColor(int color)
+    {
+        ColorPicked = color;
     }
 }
