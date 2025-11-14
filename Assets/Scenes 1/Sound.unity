@@ -556,6 +556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   linePrefab: {fileID: 3381105308868423015, guid: bd89d4bb1b1a2ca4fabe693331e3c007, type: 3}
   pickColorMenu: {fileID: 1735855237}
+  soundController: {fileID: 1687957726}
   ColorPicked: 0
 --- !u!4 &357292595
 Transform:
@@ -2448,6 +2449,124 @@ PolygonCollider2D:
       - {x: -3.2578082, y: -1.6335326}
       - {x: -2.2179618, y: -1.3278579}
   m_UseDelaunayMesh: 0
+--- !u!1 &1687957725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6791771438281337143, guid: 197a7be064fc3394ab0f1c1471fe81bb, type: 3}
+  m_PrefabInstance: {fileID: 8177171863868604253}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1687957726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687957725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89b49c5ea99f2148aac489cea791e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundController
+  playerAudioSource: {fileID: 1687957727}
+  paintStart: {fileID: 8300000, guid: 49574fc626e1d804dbd8f764e08739d1, type: 3}
+  paintWhile: {fileID: 8300000, guid: c045137acf7b22c4e971fa1678370e33, type: 3}
+  paintEnd: {fileID: 8300000, guid: 8afa1fd9a0c91524ca2572fc4154876c, type: 3}
+--- !u!82 &1687957727
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687957725}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1735855237 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3162806145686520960, guid: 197a7be064fc3394ab0f1c1471fe81bb, type: 3}
@@ -2895,7 +3014,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6791771438281337143, guid: 197a7be064fc3394ab0f1c1471fe81bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1687957726}
+    - targetCorrespondingSourceObject: {fileID: 6791771438281337143, guid: 197a7be064fc3394ab0f1c1471fe81bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1687957727}
   m_SourcePrefab: {fileID: 100100000, guid: 197a7be064fc3394ab0f1c1471fe81bb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
