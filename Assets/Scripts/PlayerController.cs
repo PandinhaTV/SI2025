@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +24,21 @@ public class PlayerController : MonoBehaviour
     private bool facingRight = true;
     private bool canJump = true;
     private GameObject kid;
+    private int hazardLayer;
+    public string hazardLayerName = "Traps";
+
+    public Transform teleportPoint;
+    void Start()
+    {
+        hazardLayer = LayerMask.NameToLayer(hazardLayerName);
+        GameObject tp = GameObject.Find("TeleportPoint");
+        if (tp != null)
+            teleportPoint = tp.transform;
+        else
+            Debug.LogError("TeleportPoint object not found in scene!");
+    
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -45,13 +62,28 @@ public class PlayerController : MonoBehaviour
         controls.Disable();
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Traps"))
+        {
+            OnHitTrap();
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("End"))
+        {
+            Debug.Log("Game Over!");
+        }
+    }
+
+
+
     private void Update()
     {
-        // Move the player horizontally
-        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        
+        
         // Check if grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
+        
         // Reset jump availability when grounded
         if (isGrounded)
         {
@@ -76,7 +108,7 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isRunning", false);
         }
-        // Flip sprite when changing direction
+        // Flip sprite when changing directiond
         if (moveInput.x > 0 && !facingRight)
             Flip();
         else if (moveInput.x < 0 && facingRight)
@@ -86,7 +118,8 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         
-
+        // Move the player horizontally
+        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         // Handle jump
         if (jumpPressed && canJump && isGrounded)
         {
@@ -113,5 +146,12 @@ public class PlayerController : MonoBehaviour
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
+    }
+    private void OnHitTrap()
+    {
+        rb.linearVelocity = Vector2.zero;      // stop motion
+        rb.angularVelocity = 0;
+        if (teleportPoint != null)
+            transform.position = teleportPoint.position;
     }
 }
