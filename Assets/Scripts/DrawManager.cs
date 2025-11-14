@@ -17,6 +17,9 @@ public class DrawManager : MonoBehaviour
     
     [SerializeField]
     private GameObject pickColorMenu;
+    
+    [SerializeField]
+    private SoundController soundController;
 
     public int ColorPicked = 0;
 
@@ -114,6 +117,9 @@ public class DrawManager : MonoBehaviour
         
         Vector2 startPos = ScreenToWorldPos(controls.Drawing.Position.ReadValue<Vector2>());
         AddPoint(newLine.transform.InverseTransformPoint(startPos));
+
+        soundController.StartPaintingSound();   // Plays the starting sound
+    
     }
 
     private void Draw()
@@ -121,6 +127,12 @@ public class DrawManager : MonoBehaviour
         Vector2 mousePos = ScreenToWorldPos(controls.Drawing.Position.ReadValue<Vector2>());
         if (points.Count == 0 || Vector2.Distance(mousePos, points[^1]) > 0.1f)
             AddPoint(mousePos);
+
+        if (!isDrawing)
+            return;
+        else
+            soundController.WhilePaintingSound();
+            
     }
 
     private void AddPoint(Vector2 point)
@@ -139,6 +151,8 @@ public class DrawManager : MonoBehaviour
         isDrawing = false;
         currentLine = null;
         currentCollider = null;
+
+        soundController.EndPaintingSound();
     }
 
     private void PickColor()
